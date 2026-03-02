@@ -17,6 +17,8 @@ app.post("/generate", async (req, res) => {
     fetchBase64(poster)
   ]);
 
+  console.log("GEMINI_KEY:", process.env.GEMINI_KEY ? "EXISTS, length=" + process.env.GEMINI_KEY.length : "MISSING");
+
   const geminiResponse = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=${process.env.GEMINI_KEY}`,
     {
