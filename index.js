@@ -4,7 +4,11 @@ const app = express();
 app.use(express.json({ limit: "50mb" }));
 
 app.post("/generate", async (req, res) => {
-  const { reference, poster } = req.body;
+  const { reference, poster, apiKey } = req.body;
+
+  if (!reference || !poster || !apiKey) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
 
   async function fetchBase64(url) {
     const response = await fetch(url);
@@ -17,10 +21,8 @@ app.post("/generate", async (req, res) => {
     fetchBase64(poster)
   ]);
 
-console.log("GEMINI_KEY first 10 chars:", process.env.GEMINI_KEY?.substring(0, 10));
-
   const geminiResponse = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=${process.env.GEMINI_KEY}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=${apiKey}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
