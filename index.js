@@ -4,9 +4,9 @@ const app = express();
 app.use(express.json({ limit: "50mb" }));
 
 app.post("/generate", async (req, res) => {
-  const { reference, poster, apiKey } = req.body;
+  const { reference, poster, apiKey, text } = req.body;
 
-  if (!reference || !poster || !apiKey) {
+  if (!reference || !poster || !apiKey || !text) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
@@ -32,17 +32,12 @@ app.post("/generate", async (req, res) => {
           parts: [
             { inline_data: { mime_type: "image/png", data: referenceB64 } },
             { inline_data: { mime_type: "image/jpeg", data: posterB64 } },
-            {
-              text: `Вставь второе изображение (постер фильма) внутрь скругленного оранжевого прямоугольника
-по центру первого изображения.
-Постер должен аккуратно вписаться внутрь, за границу можно выйти только справа, ниже рамки всё должно остаться как и было.
-Сохрани стиль оригинального макета, лого WINK нельзя изменять.`
-            }
+            { text: text }
           ]
         }],
         generation_config: {
           response_modalities: ["IMAGE"],
-          imageConfig: { aspectRatio: "1:1" }
+          imageConfig: { aspectRatio: "413:600" }
         }
       })
     }
