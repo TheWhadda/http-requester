@@ -38,7 +38,7 @@ app.post("/generate", async (req, res) => {
             ]
           }],
           generation_config: {
-            response_modalities: ["TEXT", "IMAGE"],
+            response_modalities: ["IMAGE"],
             imageConfig: { aspectRatio: "1:1" }
           }
         })
